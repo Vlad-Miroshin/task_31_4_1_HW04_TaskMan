@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Практика 31.4.1 (HW-04). Менеджер задач</title>
+</head>
+<body>
+
+    <header class="app_header">
+        <h1 class="logo">Менеджер задач</h1>
+        <div class="user_profile">
+            <div class="user_profile__icon"></div>
+            <div class="user_profile__arrow"></div>
+        </div>
+    </header>
+
+    <main class="app_main">
+
+        <div class="task_container">
+            <div class="task_group">
+                <div class="task_group__title">Требуют уточнения</div>
+
+                <ul class="task__items">
+                    <li class="task_item"><a href="#">Login page – performance issues</a></li>
+                    <li class="task_item"><a href="#">Sprint bugfix</a></li>
+                </ul>
+
+                <button class="task_button">Добавить задачу</button>
+
+                <form class="form_add_task" action="#">
+                    <input class="form_input" name="card_title" type="text">
+                    <button class="form_button">Сохранить</button>
+                </form>
+
+            </div>
+
+            <div class="task_group">
+                <div class="task_group__title">К исполнению</div>
+
+                <ul class="task__items">
+                    <li class="task_item"><a href="#">Shop page – performance issues</a></li>
+                    <li class="task_item"><a href="#">Checkout bugfix</a></li>
+                    <li class="task_item"><a href="#">Shop bug1</a></li>
+                    <li class="task_item"><a href="#">Shop bug2</a></li>
+                    <li class="task_item"><a href="#">Shop bug3</a></li>
+                </ul>
+
+                <button class="task_button">Добавить задачу</button>
+
+            </div>
+
+            <div class="task_group">
+                <div class="task_group__title">В работе</div>
+
+                <ul class="task__items">
+                    <li class="task_item"><a href="#">User page – performance issues</a></li>
+                    <li class="task_item"><a href="#">Auth bugfix</a></li>
+                </ul>
+
+                <button class="task_button">Добавить задачу</button>
+
+                <form class="form_add_task" action="#">
+                    <select class="form_select" name="select">
+                        <option value="value1">Значение 1</option>
+                        <option value="value2">Значение 2</option>
+                        <option value="value3">Значение 3</option>
+                    </select>
+                    <button class="form_button">Сохранить</button>
+                </form>
+
+            </div>
+
+            <div class="task_group">
+                <div class="task_group__title">Завершены</div>
+
+                <ul class="task__items">
+                    <li class="task_item"><a href="#">Main page – performance issues</a></li>
+                    <li class="task_item"><a href="#">Main page bugfix</a></li>
+                </ul>
+
+                <button class="task_button">Добавить задачу</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="app_footer">
+        <div class="summary">
+            <div class="summary_inprogress">Активных задач: 2</div>
+            <div class="summary_finished">Завершённых задач: 2</div>
+        </div>
+        <div class="summary_user">Задачи пользователя: admin</div>
+    </footer>
+    
+</body>
+</html>
