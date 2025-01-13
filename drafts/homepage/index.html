@@ -14,10 +14,20 @@
 
     <header class="app_header">
         <h1 class="logo">Менеджер задач</h1>
-        <div class="user_profile">
-            <div class="user_profile__icon"></div>
-            <div class="user_profile__arrow"></div>
+
+        <div class="dropdown">
+            <div id="user_profile" class="profile__button">
+                <div class="profile__icon"></div>
+                <div class="profile__arrow"></div>
+            </div>
+
+            <div id="dd_user_profile" class="dropdown-content dropdown-user_profile">
+                <a href="#">Личный кабинет</a>
+                <a href="#">Мои задачи</a>
+                <a href="#">Выйти</a>
+            </div>   
         </div>
+
     </header>
 
     <main class="app_main">
@@ -63,16 +73,16 @@
                     <li class="task_item"><a href="#">Auth bugfix</a></li>
                 </ul>
 
-                <button class="task_button">Добавить задачу</button>
+                <div class="dropdown">
+                    <button class="task_button" id="add_inprogress">Добавить задачу</button>
 
-                <form class="form_add_task" action="#">
-                    <select class="form_select" name="select">
-                        <option value="value1">Значение 1</option>
-                        <option value="value2">Значение 2</option>
-                        <option value="value3">Значение 3</option>
-                    </select>
-                    <button class="form_button">Сохранить</button>
-                </form>
+                    <div id="dd_inprogress" class="dropdown-content">
+                        <a href="#">Задача 1</a>
+                        <a href="#">Задача 2</a>
+                        <a href="#">Задача 3</a>
+                    </div>   
+                </div>
+
 
             </div>
 
@@ -98,5 +108,6 @@
         <div class="summary_user">Задачи пользователя: admin</div>
     </footer>
     
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
