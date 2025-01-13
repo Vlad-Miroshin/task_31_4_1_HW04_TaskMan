@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
   
     onclick('#add_inprogress', () => add_inprogress());
     onclick('.profile__button', () => click_profile());
-    // onclick('.user_profile__arrow', () => dropdown_user_profile());
 });
 
 function add_inprogress() {
