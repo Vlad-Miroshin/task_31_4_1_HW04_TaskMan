@@ -1,5 +1,5 @@
 {
-  "name": "TasKManager",
+  "name": "TaskManager",
   "version": "1.0.0",
   "description": "Skillfactory educational project. Pure JS web-app  written with OOP.",
   "main": "app.js",
@@ -28,13 +28,13 @@
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
+    "svg-inline-loader": "^0.8.2",
     "webpack": "^5.25.0",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.1",
-    "bootstrap": "^5.0.0-beta2",
     "uuid": "^3.4.0"
   }
 }

@@ -23,7 +23,8 @@
 
             <div id="dd_user_profile" class="dropdown-content dropdown-user_profile">
                 <a href="#">Личный кабинет</a>
-                <a href="#">Мои задачи</a>
+                <a href="#">Пользователи</a>
+                <a href="#">Задачи</a>
                 <a href="#">Выйти</a>
             </div>   
         </div>
@@ -115,6 +116,34 @@
                 <button class="task_button">Добавить задачу</button>
             </div>
         </div>
+
+
+        <div class="task_item__container">
+
+            <form class="task_item__form" action="#">
+                <button class="task_item__close-btn">&times;</button>
+                <p class="task_item__header">Задача</p>
+                <label class="task_item__label">Название</label>
+                <input class="task_item__input" type="text" name="task_title">
+                <br>
+                <label class="task_item__label">Описание</label>
+                <textarea class="task_item__text" rows="5" wrap="soft" name="task_descr"></textarea>
+                <br>
+                <div class="task_item__btn-container">
+
+                    <label class="online-checkbox-label">
+                        <input id="submit-agree" type="checkbox" name="submit-agree" class="real-checkbox">
+                        <span class="custom-checkbox"></span>
+                        Удалить задачу
+                    </label>   
+
+                    <button class="task_item__submit" type="submit">Сохранить</button>
+                </div>
+
+            </form>
+
+        </div>
+
 
     </main>
 

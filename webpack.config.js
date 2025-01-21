@@ -19,6 +19,9 @@ module.exports = {
   ],
   module: {
     rules: [
+      { test: /\.svg$/, 
+        use: 'svg-inline-loader' 
+      },
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
