@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
   
     onclick('#add_inprogress', () => add_inprogress());
     onclick('.profile__button', () => click_profile());
+    onclick('#profile_logout', () => profile_logout());
 
     document.querySelector(".login__form").addEventListener("submit", (e) => login_submit(e));
 });
@@ -63,9 +64,9 @@ const part__summary = document.querySelector(".part__summary");
 const parts = [part_profile, part_login, part__workplace, part__task, part__summary];
 
 
-let current_part = part_login;
 
-show_current_part();
+
+create_view("login");
 
 // events
 
@@ -83,7 +84,8 @@ function login_submit(e) {
     
     hide(failure);
     app.state.setCurrentUser(user);
-    console.log(login, password);
+
+    create_view("logged");
 
   } else {
     
@@ -93,16 +95,32 @@ function login_submit(e) {
   }
 };
 
+function profile_logout() {
+  app.state.logout();
+  create_view("login");
+}
 
 
 // funcs
 
-function show_current_part() {
+function create_view(name) {
   hide_all();
 
-  if (current_part) {
-    show(current_part);
+  if (name === "login") {
+    create_view_login();
+  } else if (name === "logged") {
+    create_view_logged();
   }
+}
+
+function create_view_login() {
+  show(part_login);
+}
+
+function create_view_logged() {
+  show(part_profile);
+  show(part__workplace);
+  show(part__summary);
 }
 
 function show(elem) {
@@ -118,4 +136,6 @@ function hide_all() {
     hide(part);
   });
 }
+
+
 

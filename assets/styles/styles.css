@@ -59,6 +59,13 @@ body {
     line-height: 33px;
 }
 
+.part__profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .profile__button {
     display: flex;
     flex-direction: row;
@@ -468,7 +475,7 @@ body {
     width: 100%;
 }
 
-.partition__summary {
+.part__summary {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

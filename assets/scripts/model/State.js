@@ -16,4 +16,8 @@ export class State {
     isAuthorized() {
         return this.getCurrentUser() != null;
     }
+
+    logout() {
+        this._currentUser = null;
+    }
 }

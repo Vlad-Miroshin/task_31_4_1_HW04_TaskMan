@@ -16,4 +16,6 @@ export function addToStorage(obj, key) {
     localStorage.setItem(key, JSON.stringify(storageData));
 };
 
-  
+export function saveToStorage(obj, key) {
+    localStorage.setItem(key, JSON.stringify(obj));
+};  
