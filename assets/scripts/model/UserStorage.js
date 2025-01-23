@@ -12,19 +12,18 @@ export class UserStorage {
         return addToStorage(user, KEY);
     }
 
-    contains(user) {
+    getUserByCredentials(login, password) {
         const users = this.getAllUsers();
 
         if (users != null && users.length > 0) {
           for (let item of users) {
-
-            if (user.login == item.login && user.password == item.password) {
-                return true;
+            if (item.login === login && item.password === password) {
+                return item;
             }
           }
         }
     
-        return false;
+        return null;
     }
 
     ensureAdminUser() {
@@ -32,20 +31,37 @@ export class UserStorage {
 
         const admin = new User("admin", "12345");
 
-        if (!this.contains(admin)) {
+        if (!this.getUserByCredentials(admin.login, admin.password)) {
             this.add(admin);
         }
     }
 
-    setAuthUser(user_id) {
-        document.cookie = `auth_user_id=${user_id}; expires=Sun, 16 Jul 3567 06:23:41 GMT`;
+    login(user) {
+        document.cookie = `auth_user_id=${user.id}; expires=Sun, 16 Jul 3567 06:23:41 GMT`;
     }
       
+    logout(user) {
+        document.cookie = `auth_user_id=${user.id}; max-age=0`;
+    }
+
     getAuthUserId() {
         return document.cookie.replace(
             /(?:(?:^|.*;\s*)auth_user_id\s*\=\s*([^;]*).*$)|^.*$/,
             "$1",
         );
     }
-      
+
+    getUserById(id) {
+        const users = this.getAllUsers();
+        if (users != null && users.length > 0) {
+          for (let item of users) {
+            if (item.id === id) {
+                return item;
+            }
+          }
+        }
+    
+        return null;
+    }
+
 }

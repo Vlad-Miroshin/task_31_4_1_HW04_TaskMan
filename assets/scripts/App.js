@@ -24,4 +24,30 @@ export class App {
     get taskStorage() {
         return this._taskStorage;
     }
+
+    logout() {
+        const currentUser = this.state.getCurrentUser();
+        this.userStorage.logout(currentUser);
+        this.state.logout();
+    }
+
+    login(user) {
+        this.state.login(user);
+        this.userStorage.login(user);
+    }
+
+    isAuthorized() {
+        return this.state.isAuthorized();
+    }
+
+    tryRestoreCurrentUser() {
+        const user_id = this.userStorage.getAuthUserId();
+        
+        if (user_id) {
+            const user = this.userStorage.getUserById(user_id);
+            if (user) {
+                this.login(user);
+            }
+        }
+    }
 }

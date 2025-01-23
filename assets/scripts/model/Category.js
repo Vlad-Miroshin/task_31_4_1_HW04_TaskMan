@@ -9,19 +9,17 @@ export class Category {
         this.name = name;
     }
 
-    static Backlog() {
-        return new Category("Backlog");
-    }
+    static Backlog = new Category("Backlog", "Требуют уточнения");
 
     static Ready() {
-        return new Category("Ready");
+        return new Category("Ready", "К исполнению");
     }
 
     static InProgress() {
-        return new Category("InProgress");
+        return new Category("InProgress", "В работе");
     }
 
     static Finished() {
-        return new Category("Finished");
+        return new Category("Finished", "Завершены");
     }
 }

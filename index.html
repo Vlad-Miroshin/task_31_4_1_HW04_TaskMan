@@ -61,16 +61,13 @@
                 <div class="workplace__group">
                     <div class="group__title">Требуют уточнения</div>
     
-                    <ul class="group__items">
-                        <li class="task_item"><a href="#">Login page – performance issues</a></li>
-                        <li class="task_item"><a href="#">Sprint bugfix</a></li>
-                    </ul>
+                    <ul id="group_backlog" class="task__items"></ul>
     
-                    <button class="task_button">Добавить задачу</button>
+                    <button id="new_card_btn" class="task_button">Добавить задачу</button>
     
-                    <form class="form__add_task hidden" action="#">
-                        <input class="form__input" name="card_title" type="text">
-                        <button class="form__button">Сохранить</button>
+                    <form id="new_card" class="form__add_task hidden" action="#">
+                        <input id="new_card_title" class="form__input" name="card_title" type="text">
+                        <button type="submit" class="form__button">Сохранить</button>
                     </form>
     
                 </div>
@@ -128,19 +125,19 @@
 
         <div class="part__task hidden">
 
-            <form class="task_prop__form" action="#">
+            <form id="update_card" class="task_prop__form" action="#">
                 <button class="task_prop__close-btn">&times;</button>
                 <p class="task_prop__header">Задача</p>
                 <label class="task_prop__label">Название
-                    <input class="task_prop__input" type="text" name="task_title">
+                    <input id="update_card_title" class="task_prop__input" type="text" name="task_title">
                 </label>
                 <br>
                 <label class="task_prop__label">Описание
-                    <textarea class="task_prop__text" rows="5" wrap="soft" name="task_descr"></textarea>
+                    <textarea id="update_card_description" class="task_prop__text" rows="5" wrap="soft" name="task_descr"></textarea>
                 </label>
                 <br>
                 <label class="online-checkbox-label">
-                    <input id="submit-agree" type="checkbox" name="submit-agree" class="real-checkbox">
+                    <input id="update_card_delete" type="checkbox" name="task_delete" class="real-checkbox">
                     <span class="custom-checkbox"></span>
                     Удалить задачу
                 </label>   

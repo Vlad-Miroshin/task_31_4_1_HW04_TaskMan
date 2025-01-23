@@ -1,5 +1,6 @@
 import { App } from './App.js';
-import { User } from './model/User.js';
+import { Category } from './model/Category.js';
+import { Task } from './model/Task.js';
 
 
 // application
@@ -7,6 +8,7 @@ import { User } from './model/User.js';
 const app = new App();
 
 app.userStorage.ensureAdminUser(); // admin 12345
+app.taskStorage.ensureDefaultTask(); // Тестовая задача
 
 
 // init event listeners
@@ -19,8 +21,12 @@ document.addEventListener('DOMContentLoaded', ()=> {
     onclick('#add_inprogress', () => add_inprogress());
     onclick('.profile__button', () => click_profile());
     onclick('#profile_logout', () => profile_logout());
+    onclick('#new_card_btn', () => handle_new_card());
+    onclick('.task_prop__close-btn', () => update_card_close());
 
     document.querySelector(".login__form").addEventListener("submit", (e) => login_submit(e));
+    document.querySelector("#new_card").addEventListener("submit", (e) => new_card_submit(e));
+    document.querySelector("#update_card").addEventListener("submit", (e) => update_card_submit(e));
 });
 
 function add_inprogress() {
@@ -57,38 +63,39 @@ window.onclick = function(event) {
 
 const part_profile = document.querySelector(".part__profile");
 const part_login = document.querySelector(".part__login");
-const part__workplace = document.querySelector(".part__workplace");
-const part__task = document.querySelector(".part__task");
-const part__summary = document.querySelector(".part__summary");
+const part_workplace = document.querySelector(".part__workplace");
+const part_task = document.querySelector(".part__task");
+const part_summary = document.querySelector(".part__summary");
 
-const parts = [part_profile, part_login, part__workplace, part__task, part__summary];
+const parts = [part_profile, part_login, part_workplace, part_task, part_summary];
 
+// пробуем восстановить текущего пользователя
+app.tryRestoreCurrentUser(); 
 
-
-
-create_view("login");
+// внешний вид приложения
+create_view_app();
 
 // events
 
 function login_submit(e) {
- 
   e.preventDefault();
 
   const login = document.querySelector("#login__username").value;
   const password = document.querySelector("#login__password").value;
   const failure = document.querySelector(".login__failure");
 
-  const user = new User(login, password);
+  const user = app.userStorage.getUserByCredentials(login, password);
   
-  if (app.userStorage.contains(user)) {
+  if (user) {
     
     hide(failure);
-    app.state.setCurrentUser(user);
+    app.login(user);
 
-    create_view("logged");
+    create_view("tasks");
 
   } else {
     
+    app.logout();
     failure.innerText = "Недопустимое имя пользователя или пароль";
     show(failure);
 
@@ -96,7 +103,7 @@ function login_submit(e) {
 };
 
 function profile_logout() {
-  app.state.logout();
+  app.logout();
   create_view("login");
 }
 
@@ -108,19 +115,11 @@ function create_view(name) {
 
   if (name === "login") {
     create_view_login();
-  } else if (name === "logged") {
-    create_view_logged();
+  } else if (name === "tasks") {
+    create_view_tasks();
+  } else if (name === "task_item") {
+    create_view_update_card();
   }
-}
-
-function create_view_login() {
-  show(part_login);
-}
-
-function create_view_logged() {
-  show(part_profile);
-  show(part__workplace);
-  show(part__summary);
 }
 
 function show(elem) {
@@ -137,5 +136,134 @@ function hide_all() {
   });
 }
 
+function removeAllChilds(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
 
 
+// views
+
+function create_view_app() {
+  if (!app.isAuthorized()) {
+    create_view("login");
+  } else {
+    create_view("tasks");
+  }
+}
+
+function create_view_login() {
+  show(part_login);
+}
+
+function create_view_tasks() {
+  show(part_profile);
+  show(part_workplace);
+  show(part_summary);
+
+  let tasks = null;
+  if (app.state.isAdmin()) {
+    tasks = app.taskStorage.getAllTasks();
+  } else {
+    tasks = app.taskStorage.getTasksByOwner(app.state.getCurrentUser());
+  }
+
+  const backlog = app.taskStorage.getTasks(tasks, Category.Backlog);
+
+  if (backlog) {
+    const ul_backlog = document.querySelector("#group_backlog");
+    removeAllChilds(ul_backlog);
+
+    for (let tsk of backlog) {
+  
+      const a = document.createElement("a");
+      a.innerText = tsk.title;
+      a.href = "#";
+      a.setAttribute("data-id", tsk.id)
+      a.addEventListener("click", (e) => handle_task_click(e));
+      
+      const li = document.createElement("li");
+      li.className = "task_item";
+      li.appendChild(a);
+  
+      ul_backlog.appendChild(li);
+    }
+  }
+}  
+
+function handle_new_card() {
+  const btn = document.querySelector("#new_card_btn");
+  const form = document.querySelector("#new_card");
+  hide(btn);
+  show(form);
+}
+
+function new_card_submit(e) {
+  e.preventDefault();
+
+  const btn = document.querySelector("#new_card_btn");
+  const form = document.querySelector("#new_card");
+  const title = document.querySelector("#new_card_title").value;
+
+  if (title) {
+    const task = new Task(title);
+    task.setCategory(Category.Backlog);
+    task.setOwner(app.state.getCurrentUser());
+
+    app.taskStorage.create(task);
+  }
+
+  hide(form);
+  show(btn);
+
+  create_view_tasks();
+}
+  
+function handle_task_click(e) {
+  e.preventDefault();
+
+  const task_id = e.target.getAttribute("data-id");
+  const task = app.taskStorage.getItemById(task_id);
+  if (task) {
+    app.state.setCurrentTask(task);
+    create_view("task_item");
+  }
+}
+
+function create_view_update_card() {
+  show(part_task);
+
+  const task = app.state.getCurrentTask();
+
+  if (task) {
+    document.querySelector("#update_card_title").value = task.title;
+    document.querySelector("#update_card_description").value = task.description;
+    document.querySelector("#update_card_delete").checked = false;
+  }
+}
+
+function update_card_close() {
+  create_view_app();
+}
+
+function update_card_submit(e) {
+  e.preventDefault();
+
+  const task = app.state.getCurrentTask();
+
+  if (task) {
+    task.title = document.querySelector("#update_card_title").value;
+    task.description = document.querySelector("#update_card_description").value;
+
+    const is_delete = document.querySelector("#update_card_delete").checked;
+
+    if (is_delete) {
+      app.taskStorage.delete(task);
+    } else {
+      app.taskStorage.update(task);
+    }
+  }
+
+  create_view_app();
+}

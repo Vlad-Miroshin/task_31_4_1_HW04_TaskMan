@@ -1,13 +1,17 @@
 import { Task } from './Task.js';
 import { getFromStorage, addToStorage, saveToStorage } from '../utils.js';
+import { Category } from './Category.js';
 
 const KEY = "app_tasks";
 
 export class TaskStorage {
-    KEY = "";
 
-    getAllTask() {
+    getAllTasks() {
         return getFromStorage(KEY);
+    }
+
+    getTasksByOwner(user) {
+        return this.getAllTasks().filter(item => item.owner_id === user.id);
     }
 
     create(task) {
@@ -26,9 +30,23 @@ export class TaskStorage {
         return  -1;
     }
 
+    getItemById(id) {
+        const tasks = this.getAllTasks();
+
+        if (tasks && tasks.length > 0) {
+            for (let item of tasks) {
+              if (item.id == id) {
+                  return item;
+              }
+            }
+        }
+
+        return  null;
+    }
+
     update(task) {
         const tasks = this.getAllTasks();
-        const index = _getIndexById(tasks, task.id);
+        const index = this._getIndexById(tasks, task.id);
 
         if (index >= 0) {
             tasks[index].title = task.title;
@@ -42,12 +60,31 @@ export class TaskStorage {
 
     delete(task) {
         const tasks = this.getAllTasks();
-        const index = _getIndexById(tasks, task.id);
+        const index = this._getIndexById(tasks, task.id);
 
         if (index >= 0) {
-            const result = tasks.splice(index, 1);
+            tasks.splice(index, 1);
 
-            saveToStorage(result, KEY);
+            saveToStorage(tasks, KEY);
+        }
+    }
+
+    getTasks(tasks, category) {
+        if (tasks && tasks.length > 0) {
+            return tasks.filter(item => item.category_id === category.id);
+        }
+
+        return null;
+    }
+
+    ensureDefaultTask() {
+        const tasks = this.getAllTasks();
+
+        if (!tasks || tasks.length === 0) {
+            const dummy = new Task("Тестовая задача");
+            dummy.setCategory(Category.Backlog);
+
+            this.create(dummy);           
         }
     }
 }

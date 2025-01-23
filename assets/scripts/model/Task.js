@@ -9,7 +9,7 @@ export class Task extends BaseModel {
     }
 
     setOwner(user) {
-        this.user_id = user.id;
+        this.owner_id = user.id;
     }
 
     setCategory(category) {
