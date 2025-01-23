@@ -13,6 +13,12 @@ export class Task extends BaseModel {
     }
 
     setCategory(category) {
-        this.category_id = category.id;
+        this.setCategoryId(category.id);
     }
+
+    setCategoryId(id) {
+        this.category_id = id;
+    }
+
+
 }

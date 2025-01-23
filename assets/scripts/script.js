@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     }
   
     onclick('#add_inprogress', () => add_inprogress());
+    onclick('#add_ready', () => add_ready());
     onclick('.profile__button', () => click_profile());
     onclick('#profile_logout', () => profile_logout());
     onclick('#new_card_btn', () => handle_new_card());
@@ -32,6 +33,11 @@ document.addEventListener('DOMContentLoaded', ()=> {
 function add_inprogress() {
   document.querySelector("#dd_inprogress").classList.toggle("dropdown-show");    
 }
+
+function add_ready() {
+  document.querySelector("#dd_ready").classList.toggle("dropdown-show");    
+}
+
 
 function click_profile() {
   document.querySelector("#dd_user_profile").classList.toggle("dropdown-show");    
@@ -136,7 +142,7 @@ function hide_all() {
   });
 }
 
-function removeAllChilds(parent) {
+function removeAllChields(parent) {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
@@ -170,27 +176,62 @@ function create_view_tasks() {
   }
 
   const backlog = app.taskStorage.getTasks(tasks, Category.Backlog);
+  const ready = app.taskStorage.getTasks(tasks, Category.Ready);
+  const inProgress = app.taskStorage.getTasks(tasks, Category.InProgress);
+  const finished = app.taskStorage.getTasks(tasks, Category.Finished);
 
-  if (backlog) {
-    const ul_backlog = document.querySelector("#group_backlog");
-    removeAllChilds(ul_backlog);
+  create_card_items(backlog, "#group_backlog");
+  create_drop_items(backlog, "#dd_ready", Category.Ready);
 
-    for (let tsk of backlog) {
+  create_card_items(ready, "#group_ready");
+  // create_card_items(inProgress, "#group_inprogress");
+  // create_card_items(finished, "#group_finished");
+}
+
+function create_card_items(items, groupSelector, dropDownSelector = "") {
   
+  // группа
+  const group = document.querySelector(groupSelector);
+  removeAllChields(group);
+
+  if (items && items.length > 0) {
+    for (let tsk of items) {
+
       const a = document.createElement("a");
       a.innerText = tsk.title;
       a.href = "#";
       a.setAttribute("data-id", tsk.id)
-      a.addEventListener("click", (e) => handle_task_click(e));
+      a.addEventListener("click", (e) => handle_card_click(e));
       
       const li = document.createElement("li");
       li.className = "task_item";
       li.appendChild(a);
-  
-      ul_backlog.appendChild(li);
+
+      group.appendChild(li);
     }
   }
-}  
+}
+
+function create_drop_items(items, dropDownSelector, targetCategory) {
+
+  // меню "Добавить задачу"
+  const dropDown = document.querySelector(dropDownSelector);
+  removeAllChields(dropDown);
+  
+  if (items && items.length > 0) {
+    for (let tsk of items) {
+
+      const a = document.createElement("a");
+        a.innerText = tsk.title;
+        a.href = "#";
+        a.setAttribute("data-id", tsk.id)
+        a.setAttribute("data-target-id", targetCategory.id)
+        a.addEventListener("click", (e) => handle_takeover_card_click(e));
+
+        dropDown.appendChild(a);
+      }
+    }
+}
 
 function handle_new_card() {
   const btn = document.querySelector("#new_card_btn");
@@ -219,8 +260,9 @@ function new_card_submit(e) {
 
   create_view_tasks();
 }
-  
-function handle_task_click(e) {
+
+
+function handle_card_click(e) {
   e.preventDefault();
 
   const task_id = e.target.getAttribute("data-id");
@@ -228,6 +270,22 @@ function handle_task_click(e) {
   if (task) {
     app.state.setCurrentTask(task);
     create_view("task_item");
+  }
+}
+
+function handle_takeover_card_click(e) {
+  e.preventDefault();
+
+  const task_id = e.target.getAttribute("data-id");
+  const target_id = e.target.getAttribute("data-target-id");
+
+  const task = app.taskStorage.getItemById(task_id);
+  if (task) {
+
+    task.setCategoryId(target_id);
+    app.taskStorage.update(task);
+
+    create_view("tasks");
   }
 }
 

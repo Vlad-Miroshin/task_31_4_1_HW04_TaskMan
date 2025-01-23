@@ -75,28 +75,22 @@
                 <div class="workplace__group">
                     <div class="group__title">К исполнению</div>
     
-                    <ul class="task__items">
-                        <li class="task_item"><a href="#">Shop page – performance issues</a></li>
-                        <li class="task_item"><a href="#">Checkout bugfix</a></li>
-                        <li class="task_item"><a href="#">Shop bug1</a></li>
-                        <li class="task_item"><a href="#">Shop bug2</a></li>
-                        <li class="task_item"><a href="#">Shop bug3</a></li>
-                    </ul>
-    
-                    <button class="task_button">Добавить задачу</button>
+                    <ul id="group_ready" class="task__items"></ul>
+
+                    <div class="dropdown">
+                        <button id="add_ready" class="task_button" >Добавить задачу</button>
+                        <div id="dd_ready" class="dropdown-content"></div>   
+                    </div>
     
                 </div>
     
                 <div class="workplace__group">
                     <div class="group__title">В работе</div>
     
-                    <ul class="task__items">
-                        <li class="task_item"><a href="#">User page – performance issues</a></li>
-                        <li class="task_item"><a href="#">Auth bugfix</a></li>
-                    </ul>
+                    <ul id="group_inprogress" class="task__items"></ul>
     
                     <div class="dropdown">
-                        <button class="task_button" id="add_inprogress">Добавить задачу</button>
+                        <button id="add_inprogress" class="task_button">Добавить задачу</button>
     
                         <div id="dd_inprogress" class="dropdown-content">
                             <a href="#">Задача 1</a>
@@ -111,12 +105,9 @@
                 <div class="workplace__group">
                     <div class="group__title">Завершены</div>
     
-                    <ul class="task__items">
-                        <li class="task_item"><a href="#">Main page – performance issues</a></li>
-                        <li class="task_item"><a href="#">Main page bugfix</a></li>
-                    </ul>
+                    <ul id="group_finished" class="task__items"></ul>
     
-                    <button class="task_button">Добавить задачу</button>
+                    <button class="task_button task_button--disabled">Добавить задачу</button>
                 </div>
             </div>
     

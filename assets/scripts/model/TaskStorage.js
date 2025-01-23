@@ -7,7 +7,15 @@ const KEY = "app_tasks";
 export class TaskStorage {
 
     getAllTasks() {
-        return getFromStorage(KEY);
+        const items = getFromStorage(KEY);
+        return items.map(function(item){
+            const task = new Task(item.title, item.description);
+            task.id = item.id;
+            task.category_id = item.category_id;
+            task.owner_id = item.owner_id;
+
+            return task;
+        });
     }
 
     getTasksByOwner(user) {
@@ -35,7 +43,7 @@ export class TaskStorage {
 
         if (tasks && tasks.length > 0) {
             for (let item of tasks) {
-              if (item.id == id) {
+              if (item.id === id) {
                   return item;
               }
             }
