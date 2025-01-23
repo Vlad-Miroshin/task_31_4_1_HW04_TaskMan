@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector(".login__form").addEventListener("submit", (e) => login_submit(e));
     document.querySelector("#new_card").addEventListener("submit", (e) => new_card_submit(e));
     document.querySelector("#update_card").addEventListener("submit", (e) => update_card_submit(e));
+
+    document.querySelector("#workplace_group_backlog").addEventListener("dragenter", (e) => handle_drag_enter(e));
+    document.querySelector("#workplace_group_backlog").addEventListener("dragover", (e) => handle_drag_over(e));
+    document.querySelector("#workplace_group_backlog").addEventListener("drop", (e) => handle_drop(e, Category.Backlog));
 });
 
 function add_inprogress() {
@@ -201,7 +205,10 @@ function create_card_items(items, groupSelector, dropDownSelector = "") {
       a.innerText = tsk.title;
       a.href = "#";
       a.setAttribute("data-id", tsk.id)
+      a.draggable = true;
       a.addEventListener("click", (e) => handle_card_click(e));
+      a.addEventListener("dragstart", (e) => handle_drag_start(e));
+      a.addEventListener("dragend", (e) => handle_drag_end(e));
       
       const li = document.createElement("li");
       li.className = "task_item";
@@ -288,6 +295,39 @@ function handle_takeover_card_click(e) {
     create_view("tasks");
   }
 }
+
+function handle_drag_start(e) {
+  const id = e.target.getAttribute("data-id");
+  e.dataTransfer.setData("application/x.bookmark", id);
+}
+
+function handle_drag_end(e) {
+
+//console.log(e);
+}
+
+
+function handle_drag_over(e) {
+  e.preventDefault();
+
+}
+
+function handle_drag_enter(e) {
+  e.preventDefault();
+
+}
+
+function handle_drop(e, category) {
+  e.preventDefault();
+
+  
+
+console.log("id", e.dataTransfer.getData("application/x.bookmark"));
+console.log("category", category.id);
+
+}
+
+// views 
 
 function create_view_update_card() {
   show(part_task);
