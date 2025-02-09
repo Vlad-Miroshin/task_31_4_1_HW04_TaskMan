@@ -1,6 +1,8 @@
 import { App } from './App.js';
 import { Category } from './model/Category.js';
 import { Task } from './model/Task.js';
+import { User } from './model/User.js';
+import { UserRole } from './model/UserRole.js';
 
 
 // application
@@ -23,12 +25,16 @@ document.addEventListener('DOMContentLoaded', ()=> {
     onclick('#add_finished', () => add_finished());
     onclick('.profile__button', () => click_profile());
     onclick('#profile_logout', () => profile_logout());
+    onclick('#profile_users', () => profile_users());
+    onclick('#profile_tasks', () => profile_tasks());
     onclick('#new_card_btn', () => handle_new_card());
     onclick('.task_prop__close-btn', () => update_card_close());
 
     document.querySelector(".login__form").addEventListener("submit", (e) => login_submit(e));
     document.querySelector("#new_card").addEventListener("submit", (e) => new_card_submit(e));
     document.querySelector("#update_card").addEventListener("submit", (e) => update_card_submit(e));
+    document.querySelector(".user__form").addEventListener("submit", (e) => user_submit(e));
+    
 
     const workplaceGroups = document.querySelectorAll(".workplace__group");
     workplaceGroups.forEach((item) => {
@@ -36,8 +42,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
       item.addEventListener("dragover", (e) => handle_drag_over(e));
     });
 
-    // document.querySelector("#workplace_group_backlog").addEventListener("dragenter", (e) => handle_drag_enter(e));
-    // document.querySelector("#workplace_group_backlog").addEventListener("dragover", (e) => handle_drag_over(e));
     document.querySelector("#workplace_group_backlog").addEventListener("drop", (e) => handle_drop(e, Category.Backlog));
     document.querySelector("#workplace_group_ready").addEventListener("drop", (e) => handle_drop(e, Category.Ready));
     document.querySelector("#workplace_group_inProgress").addEventListener("drop", (e) => handle_drop(e, Category.InProgress));
@@ -89,8 +93,9 @@ const part_login = document.querySelector(".part__login");
 const part_workplace = document.querySelector(".part__workplace");
 const part_task = document.querySelector(".part__task");
 const part_summary = document.querySelector(".part__summary");
+const part_users = document.querySelector(".part__users");
 
-const parts = [part_profile, part_login, part_workplace, part_task, part_summary];
+const parts = [part_profile, part_login, part_workplace, part_task, part_summary, part_users];
 
 // пробуем восстановить текущего пользователя
 app.tryRestoreCurrentUser(); 
@@ -130,6 +135,13 @@ function profile_logout() {
   create_view("login");
 }
 
+function profile_users() {
+  create_view("profile_users");
+}
+
+function profile_tasks() {
+  create_view("tasks");
+}
 
 // funcs
 
@@ -138,6 +150,8 @@ function create_view(name) {
 
   if (name === "login") {
     create_view_login();
+  } else if (name === "profile_users") {
+    create_view_users();
   } else if (name === "tasks") {
     create_view_tasks();
   } else if (name === "task_item") {
@@ -198,9 +212,9 @@ function create_view_tasks() {
   const finished = app.taskStorage.getTasks(tasks, Category.Finished);
 
   create_card_items(backlog, "#group_backlog");
-  create_drop_items(backlog, "#dd_ready", Category.Ready);
-  create_drop_items(ready, "#dd_inprogress", Category.InProgress);
-  create_drop_items(inProgress, "#dd_finished", Category.Finished);
+  create_drop_items(backlog, "#dd_ready", "#add_ready", Category.Ready);
+  create_drop_items(ready, "#dd_inprogress", "#add_inprogress", Category.InProgress);
+  create_drop_items(inProgress, "#dd_finished", "add_finished", Category.Finished);
 
   create_card_items(ready, "#group_ready");
   create_card_items(inProgress, "#group_inprogress");
@@ -252,11 +266,14 @@ function create_card_items(items, groupSelector, dropDownSelector = "") {
   }
 }
 
-function create_drop_items(items, dropDownSelector, targetCategory) {
+function create_drop_items(items, dropDownSelector, buttonSelector, targetCategory) {
 
   // меню "Добавить задачу"
   const dropDown = document.querySelector(dropDownSelector);
   removeAllChields(dropDown);
+
+
+  const dropDownButton = document.querySelector(buttonSelector);
   
   if (items && items.length > 0) {
     for (let tsk of items) {
@@ -270,6 +287,17 @@ function create_drop_items(items, dropDownSelector, targetCategory) {
 
         dropDown.appendChild(a);
       }
+
+      if (dropDownButton)
+        dropDownButton.classList.remove("task_button--disabled");
+
+    } else {
+
+      // console.log(dropDown.closest("div").closest("div"));
+      // console.log(dropDownButton);
+
+      if (dropDownButton)
+        dropDownButton.classList.add("task_button--disabled");
     }
 }
 
@@ -401,4 +429,95 @@ function update_card_submit(e) {
   }
 
   create_view_app();
+}
+
+function create_view_users() {
+  show(part_profile);
+  show(part_users);
+
+  create_registered_users();
+}
+
+function create_registered_users() {
+  const root = document.querySelector(".user_list__items");
+
+  removeAllChields(root);
+
+  const allUsers = app.userStorage.getAllUsers();
+
+  if (allUsers && allUsers.length > 0) {
+    for (let user of allUsers) {
+      add_user(root, user);
+    }
+  }
+}
+
+function add_user(elem, user) {
+  const div = document.createElement("div");
+  div.innerText = `${user.login} (${UserRole.getName(user.getRoleId())})`;
+
+  const button = document.createElement("button");
+  button.className = "user_list__button";
+  button.innerText = "Удалить";
+  button.setAttribute("data-id", user.id);
+  button.onclick = delete_user;
+        
+  const li = document.createElement("li");
+  li.className = "user_list__item";
+  li.appendChild(div);
+  li.appendChild(button);
+
+  elem.appendChild(li);
+}
+
+function delete_user(e) {
+  const user_id = e.target.getAttribute("data-id");
+
+  const user = app.userStorage.getUserById(user_id);
+  if (user) {
+    app.userStorage.delete(user);
+    create_registered_users();  
+  }
+}
+
+function user_submit(e) {
+  e.preventDefault();
+
+  const login = document.querySelector("#user_login").value;
+  const password = document.querySelector("#user_password").value;
+  const role = document.querySelector("#user_role").value;
+  const failure = document.querySelector(".user__failure");
+
+  const newUser = new User(login, password);
+  newUser.setRoleId(role);
+
+  const err = checkupNewUser(newUser);
+
+  if (err) {
+    failure.innerText = err;
+    show(failure);
+  } else {
+    hide(failure);
+    app.userStorage.add(newUser);
+
+    const root = document.querySelector(".user_list__items");
+    add_user(root, newUser);
+  }
+};
+
+function checkupNewUser(user) {
+  if (!user.login || user.login === "") {
+    return "Укажите имя учётной записи";
+  }
+
+  if (!user.password || user.password === "") {
+    return "Укажите пароль";
+  }
+
+  const existsUser = app.userStorage.existsLogin(user.login);
+  if (existsUser) {
+    return "Учётная запись уже существует";
+  }
+
+  return null;
 }

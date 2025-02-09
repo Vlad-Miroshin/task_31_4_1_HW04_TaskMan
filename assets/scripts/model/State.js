@@ -1,3 +1,5 @@
+import { UserRole} from './UserRole.js';
+
 export class State {
     _currentUser = null;
     _currentTask = null;
@@ -20,7 +22,7 @@ export class State {
     }
 
     isAdmin() {
-        return this.isAuthorized() && this.getCurrentUser().login === "admin";
+        return this.isAuthorized() && this.getCurrentUser().getRoleId() === UserRole.Admin.id;
     }
 
     logout() {

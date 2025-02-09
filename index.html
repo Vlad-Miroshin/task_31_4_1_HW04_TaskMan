@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./assets/images/web_16.png" type="image/x-icon">
+    <link rel="icon" href="./assets/images/app.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
@@ -24,9 +24,8 @@
                 </div>
     
                 <div id="dd_user_profile" class="dropdown-content dropdown-user_profile">
-                    <a href="#">Личный кабинет</a>
-                    <a href="#">Пользователи</a>
-                    <a href="#">Задачи</a>
+                    <a id="profile_users" href="#">Пользователи</a>
+                    <a id="profile_tasks" href="#">Задачи</a>
                     <a id="profile_logout" href="#">Выйти</a>
                 </div>   
             </div>
@@ -92,7 +91,6 @@
     
                     <div class="dropdown">
                         <button id="add_inprogress" class="task_button">Добавить задачу</button>
-    
                         <div id="dd_inprogress" class="dropdown-content"></div>   
                     </div>
     
@@ -104,11 +102,8 @@
     
                     <ul id="group_finished" class="task__items"></ul>
     
-                    <!-- <button class="task_button task_button--disabled">Добавить задачу</button> -->
-
                     <div class="dropdown">
                         <button id="add_finished" class="task_button">Добавить задачу</button>
-    
                         <div id="dd_finished" class="dropdown-content"></div>   
                     </div>
 
@@ -143,6 +138,44 @@
 
         </div>
 
+        <div class="part__users hidden">
+            <form class="user__form" action="#">
+                <p class="user__header">Новый пользователь</p>
+                <label class="user__label">Учётная запись (login)</label>
+                <input id="user_login" class="user__input" type="text" name="user_login">
+                <label class="user__label">Пароль</label>
+                <input id="user_password" class="user__input" type="text" name="user_password">
+
+                <label class="user__label">Роль</label>
+                <select id="user_role" class="user__input" name="user_role">
+                    <option value = "Admin">Администратор</option>
+                    <option value = "User" selected>Пользователь</option>
+                </select>
+
+                <br>
+
+                <div class="user__failure hidden">Пароль не может быть пустым</div>
+                <button class="user__submit" type="submit">Добавить</button>
+            </form>
+
+            <div class="user_list__container">
+                <div class="user_list__title">Зарегистрированные пользователи</div>
+                <ul class="user_list__items">
+                    <li class="user_list__item">
+                        <div>admin (Администратор)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                    <li class="user_list__item">
+                        <div>john_doe (Пользователь)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                    <li class="user_list__item">
+                        <div>user (Пользователь)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     </main>
 

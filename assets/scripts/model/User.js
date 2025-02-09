@@ -7,4 +7,17 @@ export class User extends BaseModel {
         this.login = login;
         this.password = password;
     }
+
+    getRoleId() {
+        return this.role_id;
+    }
+
+    setRole(role) {
+        this.setRoleId(role.id);
+    }
+
+    setRoleId(id) {
+        this.role_id = id;
+    }
+
 }

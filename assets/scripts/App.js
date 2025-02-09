@@ -27,7 +27,10 @@ export class App {
 
     logout() {
         const currentUser = this.state.getCurrentUser();
-        this.userStorage.logout(currentUser);
+        if (currentUser) {
+            this.userStorage.logout(currentUser);
+        }
+        
         this.state.logout();
     }
 

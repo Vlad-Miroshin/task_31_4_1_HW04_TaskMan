@@ -34,7 +34,7 @@
     <main class="app_main">
 
 
-        <div class="login__container">
+        <div class="login__container hidden">
 
             <form class="login__form" action="#">
                 <h2>Вход</h2>
@@ -51,7 +51,8 @@
         </div>
 
 
-        <div class="task_container">
+        <div class="task_container hidden">
+
             <div class="task_group">
                 <div class="task_group__title">Требуют уточнения</div>
 
@@ -118,7 +119,7 @@
         </div>
 
 
-        <div class="task_item__container">
+        <div class="task_item__container hidden">
 
             <form class="task_item__form" action="#">
                 <button class="task_item__close-btn">&times;</button>
@@ -144,6 +145,47 @@
 
         </div>
 
+
+        <div class="users__container">
+
+            <form class="user__form" action="#">
+                <p class="user__header">Новый пользователь</p>
+                <label class="user__label">Учётная запись (login)</label>
+                <input class="user__input" type="text" name="user_login">
+                <label class="user__label">Пароль</label>
+                <input class="user__input" type="text" name="user_password">
+
+                <label class="user__label">Роль</label>
+                <select class="user__input" name="user_role">
+                    <option value = "Admin">Администратор</option>
+                    <option value = "User" selected>Пользователь</option>
+                </select>
+
+                <br>
+
+                <div class="user__failure">Пароль не может быть пустым</div>
+                <button class="user__submit" type="submit">Добавить</button>
+            </form>
+
+            <div class="user_list__container">
+                <div class="user_list__title">Зарегистрированные пользователи</div>
+                <ul class="user_list__items">
+                    <li class="user_list__item">
+                        <div>admin (Администратор)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                    <li class="user_list__item">
+                        <div>john_doe (Пользователь)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                    <li class="user_list__item">
+                        <div>user (Пользователь)</div>
+                        <button class="user_list__button">Удалить</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
 
     </main>
 

@@ -82,7 +82,7 @@ export class TaskStorage {
             return tasks.filter(item => item.category_id === category.id);
         }
 
-        return null;
+        return [];
     }
 
     ensureDefaultTask() {
