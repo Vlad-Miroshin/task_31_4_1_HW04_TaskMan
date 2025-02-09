@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
   
     onclick('#add_inprogress', () => add_inprogress());
     onclick('#add_ready', () => add_ready());
+    onclick('#add_finished', () => add_finished());
     onclick('.profile__button', () => click_profile());
     onclick('#profile_logout', () => profile_logout());
     onclick('#new_card_btn', () => handle_new_card());
@@ -29,9 +30,18 @@ document.addEventListener('DOMContentLoaded', ()=> {
     document.querySelector("#new_card").addEventListener("submit", (e) => new_card_submit(e));
     document.querySelector("#update_card").addEventListener("submit", (e) => update_card_submit(e));
 
-    document.querySelector("#workplace_group_backlog").addEventListener("dragenter", (e) => handle_drag_enter(e));
-    document.querySelector("#workplace_group_backlog").addEventListener("dragover", (e) => handle_drag_over(e));
+    const workplaceGroups = document.querySelectorAll(".workplace__group");
+    workplaceGroups.forEach((item) => {
+      item.addEventListener("dragenter", (e) => handle_drag_enter(e));
+      item.addEventListener("dragover", (e) => handle_drag_over(e));
+    });
+
+    // document.querySelector("#workplace_group_backlog").addEventListener("dragenter", (e) => handle_drag_enter(e));
+    // document.querySelector("#workplace_group_backlog").addEventListener("dragover", (e) => handle_drag_over(e));
     document.querySelector("#workplace_group_backlog").addEventListener("drop", (e) => handle_drop(e, Category.Backlog));
+    document.querySelector("#workplace_group_ready").addEventListener("drop", (e) => handle_drop(e, Category.Ready));
+    document.querySelector("#workplace_group_inProgress").addEventListener("drop", (e) => handle_drop(e, Category.InProgress));
+    document.querySelector("#workplace_group_finished").addEventListener("drop", (e) => handle_drop(e, Category.Finished));
 });
 
 function add_inprogress() {
@@ -42,6 +52,9 @@ function add_ready() {
   document.querySelector("#dd_ready").classList.toggle("dropdown-show");    
 }
 
+function add_finished() {
+  document.querySelector("#dd_finished").classList.toggle("dropdown-show");    
+}
 
 function click_profile() {
   document.querySelector("#dd_user_profile").classList.toggle("dropdown-show");    
@@ -186,10 +199,30 @@ function create_view_tasks() {
 
   create_card_items(backlog, "#group_backlog");
   create_drop_items(backlog, "#dd_ready", Category.Ready);
+  create_drop_items(ready, "#dd_inprogress", Category.InProgress);
+  create_drop_items(inProgress, "#dd_finished", Category.Finished);
 
   create_card_items(ready, "#group_ready");
-  // create_card_items(inProgress, "#group_inprogress");
-  // create_card_items(finished, "#group_finished");
+  create_card_items(inProgress, "#group_inprogress");
+  create_card_items(finished, "#group_finished");
+
+  showSummary(ready.length + inProgress.length, finished.length);
+
+}
+
+function showSummary(actCount, finishedCount) {
+  const element_active = document.querySelector(".summary_inprogress");
+  const element_finished = document.querySelector(".summary_finished");
+  const element_user = document.querySelector(".summary_user");
+
+  element_active.innerText = `Активных задач: ${actCount > 0 ? actCount : "нет"}`;
+  element_finished.innerText = `Завершённых: ${finishedCount > 0 ? finishedCount : "нет"}`;
+
+  if (app.state.isAuthorized()) {
+    element_user.innerText = `Задачи пользователя: ${app.state.getCurrentUser().login}`;
+  } else {
+    element_user.innerText = "";
+  }
 }
 
 function create_card_items(items, groupSelector, dropDownSelector = "") {
@@ -320,11 +353,15 @@ function handle_drag_enter(e) {
 function handle_drop(e, category) {
   e.preventDefault();
 
-  
+  const id = e.dataTransfer.getData("application/x.bookmark");
 
-console.log("id", e.dataTransfer.getData("application/x.bookmark"));
-console.log("category", category.id);
+  const task = app.taskStorage.getItemById(id);
+  if (task) {
+    task.setCategory(category);
+    app.taskStorage.update(task);
 
+    create_view_tasks();
+  }
 }
 
 // views 

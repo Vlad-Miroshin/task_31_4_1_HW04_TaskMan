@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/images/web_16.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    
@@ -84,7 +85,7 @@
     
                 </div>
     
-                <div class="workplace__group">
+                <div id="workplace_group_inProgress" class="workplace__group">
                     <div class="group__title">В работе</div>
     
                     <ul id="group_inprogress" class="task__items"></ul>
@@ -92,22 +93,25 @@
                     <div class="dropdown">
                         <button id="add_inprogress" class="task_button">Добавить задачу</button>
     
-                        <div id="dd_inprogress" class="dropdown-content">
-                            <a href="#">Задача 1</a>
-                            <a href="#">Задача 2</a>
-                            <a href="#">Задача 3</a>
-                        </div>   
+                        <div id="dd_inprogress" class="dropdown-content"></div>   
                     </div>
     
     
                 </div>
     
-                <div class="workplace__group">
+                <div id="workplace_group_finished" class="workplace__group">
                     <div class="group__title">Завершены</div>
     
                     <ul id="group_finished" class="task__items"></ul>
     
-                    <button class="task_button task_button--disabled">Добавить задачу</button>
+                    <!-- <button class="task_button task_button--disabled">Добавить задачу</button> -->
+
+                    <div class="dropdown">
+                        <button id="add_finished" class="task_button">Добавить задачу</button>
+    
+                        <div id="dd_finished" class="dropdown-content"></div>   
+                    </div>
+
                 </div>
             </div>
     
