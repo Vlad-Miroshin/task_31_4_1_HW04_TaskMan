@@ -43,6 +43,10 @@ export class App {
         return this.state.isAuthorized();
     }
 
+    isAdmin() {
+        return this.state.isAdmin();
+    }
+
     tryRestoreCurrentUser() {
         const user_id = this.userStorage.getAuthUserId();
         

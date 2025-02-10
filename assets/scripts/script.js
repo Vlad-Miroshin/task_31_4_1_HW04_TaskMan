@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
     onclick('#add_ready', () => add_ready());
     onclick('#add_finished', () => add_finished());
     onclick('.profile__button', () => click_profile());
-    onclick('#profile_logout', () => profile_logout());
-    onclick('#profile_users', () => profile_users());
-    onclick('#profile_tasks', () => profile_tasks());
     onclick('#new_card_btn', () => handle_new_card());
     onclick('.task_prop__close-btn', () => update_card_close());
 
@@ -132,6 +129,15 @@ function login_submit(e) {
 
 function profile_logout() {
   app.logout();
+
+  const username = document.querySelector("#login__username");
+  if (username)
+    username.value = "";
+
+  const password = document.querySelector("#login__password");
+  if (password)
+    password.value = "";
+
   create_view("login");
 }
 
@@ -147,6 +153,8 @@ function profile_tasks() {
 
 function create_view(name) {
   hide_all();
+
+  create_user_profile_menu();
 
   if (name === "login") {
     create_view_login();
@@ -238,6 +246,31 @@ function showSummary(actCount, finishedCount) {
     element_user.innerText = "";
   }
 }
+
+function create_user_profile_menu() {
+  const root = document.querySelector("#dd_user_profile");
+  removeAllChields(root);
+
+  if (app.isAdmin()) {
+    add_user_profile_menu_item(root, "Пользователи", profile_users);
+  }
+
+  add_user_profile_menu_item(root, "Задачи", profile_tasks);
+  add_user_profile_menu_item(root, "Выйти", profile_logout);
+}
+
+function add_user_profile_menu_item(root, caption, handler_click) {
+  const a = document.createElement("a");
+  a.innerText = caption;
+  a.href = "#";
+  a.onclick = handler_click;
+
+  root.appendChild(a);
+}
+
+
+
+
 
 function create_card_items(items, groupSelector, dropDownSelector = "") {
   
